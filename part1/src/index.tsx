@@ -17,8 +17,8 @@ const anecdotes = [
 const App = () => {
   return (
     <div>
-      {/* <CourseInfo /> */}
-      {/* <UniCafe /> */}
+      <CourseInfo />
+      <UniCafe />
       <Anecdotes anecdotes={anecdotes} />
     </div>
   );
