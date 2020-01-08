@@ -1,10 +1,12 @@
 import React from 'react';
 import CourseInfo from './courseinfo';
+import Phonebook from './phonebook';
 
 const Part2 = () => {
   return (
     <div>
-      <CourseInfo />
+      {/* <CourseInfo /> */}
+      <Phonebook />
     </div>
   );
 };
