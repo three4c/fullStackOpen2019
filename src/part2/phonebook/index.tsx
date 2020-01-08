@@ -1,4 +1,7 @@
 import React, { useState } from 'react';
+import Filter from './components/Filter';
+import Person from './components/PersonForm';
+import Persons from './components/Persons';
 
 const Phonebook = () => {
   const [persons, setPersons] = useState([
@@ -23,8 +26,6 @@ const Phonebook = () => {
       ? window.alert(`${newName} is already added to phonebook`)
       : setPersons(persons.concat(newPeersonObject));
 
-    console.log(newPeersonObject);
-
     setNewName('');
     setNewNumber('');
   };
@@ -32,33 +33,17 @@ const Phonebook = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <div>
-        filter shown width <input onChange={e => setFilterName(e.target.value)} />
-      </div>
-      <h3>add a new</h3>
-      <form onSubmit={addPhonebook}>
-        <div>
-          <div>
-            name: <input onChange={e => setNewName(e.target.value)} value={newName} />
-          </div>
-          <div>
-            number: <input onChange={e => setNewNumber(e.target.value)} value={newNumber} />
-          </div>
-        </div>
-        <div>
-          <button type="submit">add</button>
-        </div>
-      </form>
+      <Filter onChange={setFilterName} />
+      <h3>Add a new</h3>
+      <Person
+        onSubmit={addPhonebook}
+        onChangeName={setNewName}
+        newName={newName}
+        onChangeNumber={setNewNumber}
+        newNumber={newNumber}
+      />
       <h2>Numbers</h2>
-      <ul>
-        {persons
-          .filter(item => item.name === filterName && filterName)
-          .map((item, index) => (
-            <li key={index}>
-              {item.name} {item.number}
-            </li>
-          ))}
-      </ul>
+      <Persons persons={persons} filterName={filterName} />
     </div>
   );
 };
