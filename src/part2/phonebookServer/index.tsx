@@ -5,8 +5,10 @@ const PhonebookServer: FC = () => {
   const [countries, setCountries] = useState([
     { name: '', capital: '', population: 0, languages: [{ name: '' }], flag: '' }
   ]);
-  const [filter, setFilter] = useState('');
   const [isShow, setShow] = useState([false]);
+  const [countriesFilter, setCountriesFilter] = useState([
+    { name: '', capital: '', population: 0, languages: [{ name: '' }], flag: '' }
+  ]);
 
   useEffect(() => {
     axios.get('https://restcountries.eu/rest/v2/all').then(response => {
@@ -14,19 +16,34 @@ const PhonebookServer: FC = () => {
     });
   }, []);
 
-  const countriesFilter = countries.filter(item => item.name.toLowerCase().search(filter.toLowerCase()) !== -1);
-
   const filterHandler = (event: any) => {
-    setFilter(event.target.value);
-    // setShow(Array(countriesFilter.length).fill(false));
+    console.log(event.target.value);
+    setCountriesFilter(
+      countries.filter(
+        item => item.name.toLowerCase().search(event.target.value.toLowerCase()) !== -1
+      )
+    );
   };
 
   const editHandler = (index: number) => {
     const newArray = [...isShow];
     newArray[index] = true;
     setShow(newArray);
-    console.log(isShow);
   };
+
+  const saveHandler = (index: number) => {
+    const newArray = [...isShow];
+    newArray[index] = false;
+    setShow(newArray);
+  };
+
+  const changeHandler = (event: any, index: number) => {
+    const newArray = [...countriesFilter];
+    newArray[index].name = event.target.value;
+    setCountriesFilter(newArray);
+  };
+
+  console.log(countriesFilter);
 
   return (
     <div>
@@ -37,7 +54,14 @@ const PhonebookServer: FC = () => {
         countriesFilter.map((item, index) =>
           countriesFilter.length !== 1 ? (
             <div key={index}>
-              {item.name} <button onClick={() => editHandler(index)}>{isShow ? 'edit' : 'show'}</button>
+              {isShow[index] ? (
+                <input value={item.name} onChange={event => changeHandler(event, index)} />
+              ) : (
+                item.name
+              )}
+              <button onClick={() => (isShow[index] ? saveHandler(index) : editHandler(index))}>
+                {isShow[index] ? 'save' : 'edit'}
+              </button>
             </div>
           ) : (
             <div key={index}>
