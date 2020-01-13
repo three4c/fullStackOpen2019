@@ -29,14 +29,14 @@ const Phonebook = () => {
       );
 
       if (result) {
-        personService.update(id, { ...persons, number: newNumber });
+        personService
+          .update(id, { name: newName, number: newNumber })
+          .then(() => personService.getAll().then(initialPersons => setPersons(initialPersons)));
       }
     };
 
     persons.find(item => item.name === newName)
-      ? window.confirm(
-          `${newName} is already added to phonebook, replace the old number with a new one?`
-        )
+      ? putPhonenumber(persons[persons.findIndex(item => item.name === newName)].id)
       : personService
           .create(newPersonObject)
           .then(initialPersons => setPersons(persons.concat(initialPersons)));
