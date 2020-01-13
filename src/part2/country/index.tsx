@@ -1,14 +1,14 @@
 import React, { FC, useState, useEffect } from 'react';
 import axios from 'axios';
 
-const PhonebookServer: FC = () => {
-  const [countries, setCountries] = useState([
-    { name: '', capital: '', population: 0, languages: [{ name: '' }], flag: '' }
-  ]);
+const initialState = [
+  { name: '', capital: '', population: 0, languages: [{ name: '' }], flag: '' }
+];
+
+const Country: FC = () => {
+  const [countries, setCountries] = useState(initialState);
   const [isShow, setShow] = useState([false]);
-  const [countriesFilter, setCountriesFilter] = useState([
-    { name: '', capital: '', population: 0, languages: [{ name: '' }], flag: '' }
-  ]);
+  const [countriesFilter, setCountriesFilter] = useState(initialState);
 
   useEffect(() => {
     axios.get('https://restcountries.eu/rest/v2/all').then(response => {
@@ -18,7 +18,6 @@ const PhonebookServer: FC = () => {
   }, []);
 
   const filterHandler = (event: any) => {
-    console.log(event.target.value);
     setCountriesFilter(
       countries.filter(
         item => item.name.toLowerCase().search(event.target.value.toLowerCase()) !== -1
@@ -28,13 +27,7 @@ const PhonebookServer: FC = () => {
 
   const editHandler = (index: number) => {
     const newArray = [...isShow];
-    newArray[index] = true;
-    setShow(newArray);
-  };
-
-  const saveHandler = (index: number) => {
-    const newArray = [...isShow];
-    newArray[index] = false;
+    newArray[index] = !newArray[index];
     setShow(newArray);
   };
 
@@ -43,8 +36,6 @@ const PhonebookServer: FC = () => {
     newArray[index].name = event.target.value;
     setCountriesFilter(newArray);
   };
-
-  console.log(countriesFilter);
 
   return (
     <div>
@@ -60,9 +51,7 @@ const PhonebookServer: FC = () => {
               ) : (
                 item.name
               )}
-              <button onClick={() => (isShow[index] ? saveHandler(index) : editHandler(index))}>
-                {isShow[index] ? 'save' : 'edit'}
-              </button>
+              <button onClick={() => editHandler(index)}>{isShow[index] ? 'save' : 'edit'}</button>
             </div>
           ) : (
             <div key={index}>
@@ -88,4 +77,4 @@ const PhonebookServer: FC = () => {
   );
 };
 
-export default PhonebookServer;
+export default Country;
