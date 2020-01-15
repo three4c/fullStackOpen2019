@@ -3,12 +3,14 @@ import Filter from './components/Filter';
 import Person from './components/PersonForm';
 import Persons from './components/Persons';
 import personService from './services/persons';
+import Notification from './components/Notification';
 
 const Phonebook = () => {
   const [persons, setPersons] = useState([{ name: '', number: '', id: 0 }]);
   const [newName, setNewName] = useState('');
   const [newNumber, setNewNumber] = useState('');
   const [filterName, setFilterName] = useState('');
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
   useEffect(() => {
     personService.getAll().then(initialPersons => setPersons(initialPersons));
@@ -37,9 +39,13 @@ const Phonebook = () => {
 
     persons.find(item => item.name === newName)
       ? putPhonenumber(persons[persons.findIndex(item => item.name === newName)].id)
-      : personService
-          .create(newPersonObject)
-          .then(initialPersons => setPersons(persons.concat(initialPersons)));
+      : personService.create(newPersonObject).then(initialPersons => {
+          setPersons(persons.concat(initialPersons));
+          setSuccessMessage('Success!');
+          setTimeout(() => {
+            setSuccessMessage(null);
+          }, 5000);
+        });
 
     setNewName('');
     setNewNumber('');
@@ -54,6 +60,7 @@ const Phonebook = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={successMessage} />
       <Filter onChange={setFilterName} />
       <h3>Add a new</h3>
       <Person
