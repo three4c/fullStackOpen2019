@@ -10,11 +10,19 @@ const Phonebook = () => {
   const [newName, setNewName] = useState('');
   const [newNumber, setNewNumber] = useState('');
   const [filterName, setFilterName] = useState('');
-  const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  const [message, setMessage] = useState<string | null>(null);
+  const [isSuccess, setSuccess] = useState(false);
 
   useEffect(() => {
     personService.getAll().then(initialPersons => setPersons(initialPersons));
   }, []);
+
+  const notification = (message: string) => {
+    setMessage(message);
+    setTimeout(() => {
+      setMessage(null);
+    }, 5000);
+  };
 
   const addPhonebook = (event: any) => {
     event.preventDefault();
@@ -33,7 +41,15 @@ const Phonebook = () => {
       if (result) {
         personService
           .update(id, { name: newName, number: newNumber })
-          .then(() => personService.getAll().then(initialPersons => setPersons(initialPersons)));
+          .then(() => {
+            personService.getAll().then(initialPersons => setPersons(initialPersons));
+            notification(`Changed ${newNumber} is phonenumber of ${newNumber}`);
+            setSuccess(true);
+          })
+          .catch(() => {
+            notification(`infomation of ${newName} has already been removed from server`);
+            setSuccess(false);
+          });
       }
     };
 
@@ -41,10 +57,8 @@ const Phonebook = () => {
       ? putPhonenumber(persons[persons.findIndex(item => item.name === newName)].id)
       : personService.create(newPersonObject).then(initialPersons => {
           setPersons(persons.concat(initialPersons));
-          setSuccessMessage('Success!');
-          setTimeout(() => {
-            setSuccessMessage(null);
-          }, 5000);
+          notification(`Added ${newName}`);
+          setSuccess(true);
         });
 
     setNewName('');
@@ -60,7 +74,7 @@ const Phonebook = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <Notification message={successMessage} />
+      <Notification message={message} isSuccess={isSuccess} />
       <Filter onChange={setFilterName} />
       <h3>Add a new</h3>
       <Person
