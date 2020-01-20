@@ -1,6 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-
+const morgan = require('morgan');
 const app = express();
 
 let persons = [
@@ -60,6 +60,9 @@ app.delete('/persons/:id', (request, response) => {
 app.post('/persons', (request, response) => {
   const body = request.body;
 
+  const format = `:method :url - :status - :response-time ms ${request.body}`;
+  app.use(morgan(format));
+
   if (!body.name || !body.number) {
     return response.status(400).json({
       error: 'content missing'
@@ -79,6 +82,7 @@ app.post('/persons', (request, response) => {
   };
 
   persons = persons.concat(person);
+  response.json(person);
 });
 
 const PORT = 3001;
