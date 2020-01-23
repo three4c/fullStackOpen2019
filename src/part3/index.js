@@ -69,8 +69,7 @@ app.post('/persons', (request, response) => {
     });
   }
 
-  if (persons.find(item => item.name === body.name).length !== 0) {
-    console.log(persons.find(item => item.name === body.name));
+  if (persons.filter(item => item.name === body.name).length !== 0) {
     return response.status(400).json({
       error: 'name must be unique'
     });
