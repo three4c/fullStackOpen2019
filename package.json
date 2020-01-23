@@ -2,6 +2,10 @@
   "name": "part1",
   "version": "0.1.0",
   "private": true,
+  "homepage": ".",
+  "engines": {
+    "yarn": "1.x"
+  },
   "dependencies": {
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
@@ -11,6 +15,7 @@
     "@types/react": "^16.9.0",
     "@types/react-dom": "^16.9.0",
     "axios": "^0.19.1",
+    "cors": "^2.8.5",
     "express": "^4.17.1",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",

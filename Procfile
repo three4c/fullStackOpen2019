@@ -1,0 +1,1 @@
+node ./src/part3/index.js

@@ -7,7 +7,7 @@ import Part2 from './part2';
 const App = () => {
   return (
     <div>
-      {/* <Part1 /> */}
+      <Part1 />
       <Part2 />
     </div>
   );
