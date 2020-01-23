@@ -1,1 +1,1 @@
-web: node ./src/part3/index.js
+web: node index.js
