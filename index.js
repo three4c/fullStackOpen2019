@@ -34,6 +34,7 @@ const generateId = () => {
 
 app.use(bodyParser.json());
 app.use(cors());
+app.use(express.static('build'));
 
 app.get('/info', (request, response) => {
   response.send(`

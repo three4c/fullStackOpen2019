@@ -1,5 +1,5 @@
 import axios from 'axios';
-const baseUrl = 'https://full-stack-open2019.herokuapp.com/persons';
+const baseUrl = '/persons';
 
 interface PersonProps {
   items: {
