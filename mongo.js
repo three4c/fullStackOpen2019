@@ -1,20 +1,4 @@
-// const MongoClient = require('mongodb').MongoClient;
-// const uri =
-//   'mongodb+srv://fullstackopen2019:abokado0514@cluster0-ptyni.mongodb.net/phonenumber-app?retryWrites=true&w=majority';
-// const client = new MongoClient(uri, { useNewUrlParser: true });
-// client.connect(err => {
-//   const collection = client.db('phonenumber-app').collection('persons');
-//   // perform actions on the collection object
-//   collection.insertMany([{ name: '花子' }, { name: '一郎' }]);
-//   client.close();
-// });
-
 const mongoose = require('mongoose');
-
-if (process.argv.length < 3) {
-  console.log('give password as argument');
-  process.exit(1);
-}
 
 const password = process.argv[2];
 
@@ -22,21 +6,31 @@ const url = `mongodb+srv://fullstackopen2019:${password}@cluster0-ptyni.mongodb.
 
 mongoose.connect(url, { useNewUrlParser: true });
 
-const noteSchema = new mongoose.Schema({
-  content: String,
-  date: Date,
-  important: Boolean
+const personSchema = new mongoose.Schema({
+  name: String,
+  number: String
 });
 
-const Note = mongoose.model('Note', noteSchema);
+const Person = mongoose.model('person', personSchema);
 
-const note = new Note({
-  content: 'HTML is Easy',
-  date: new Date(),
-  important: true
+const person = new Person({
+  name: process.argv[3],
+  number: process.argv[4]
 });
 
-note.save().then(response => {
-  console.log('note saved!');
-  mongoose.connection.close();
-});
+if (process.argv.length < 3) {
+  console.log('give password as argument');
+  process.exit(1);
+} else if (process.argv.length == 3) {
+  Person.find({}).then(result => {
+    result.forEach(person => {
+      console.log(person);
+    });
+    mongoose.connection.close();
+  });
+} else {
+  person.save().then(response => {
+    console.log('person saved!');
+    mongoose.connection.close();
+  });
+}
