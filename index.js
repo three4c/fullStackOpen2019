@@ -1,10 +1,13 @@
+require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
 const cors = require('cors');
 const app = express();
 
-let persons = [
+const Person = require('./models/person');
+
+let people = [
   {
     name: 'Arto Hellas',
     number: '040-123456',
@@ -28,7 +31,7 @@ let persons = [
 ];
 
 const generateId = () => {
-  const maxId = persons.length > 0 ? Math.max(...persons.map(n => n.id)) : 0;
+  const maxId = people.length > 0 ? Math.max(...people.map(n => n.id)) : 0;
   return maxId + 1;
 };
 
@@ -38,29 +41,35 @@ app.use(express.static('build'));
 
 app.get('/info', (request, response) => {
   response.send(`
-  <p>Phonebook has info for ${persons.length} people</p>
+  <p>Phonebook has info for ${people.length} people</p>
   <p>${new Date()}</p>
   `);
 });
 
-app.get('/persons', (request, response) => {
-  response.json(persons);
+app.get('/people', (request, response) => {
+  response.json(people);
 });
 
-app.get('/persons/:id', (request, response) => {
+app.get('/people/:id', (request, response) => {
   const id = Number(request.params.id);
-  const person = persons.find(person => person.id === id);
+  const person = people.find(person => person.id === id);
   person ? response.json(person) : response.status(404).end();
 });
 
-app.delete('/persons/:id', (request, response) => {
+app.get('/api/people', (request, response) => {
+  Person.find({}).then(person => {
+    response.json(person);
+  });
+});
+
+app.delete('/people/:id', (request, response) => {
   const id = Number(request.params.id);
-  persons = persons.filter(person => person.id !== id);
+  people = people.filter(person => person.id !== id);
 
   response.status(204).end();
 });
 
-app.post('/persons', (request, response) => {
+app.post('/people', (request, response) => {
   const body = request.body;
 
   const format = `:method :url - :status - :response-time ms ${request.body}`;
@@ -72,7 +81,7 @@ app.post('/persons', (request, response) => {
     });
   }
 
-  if (persons.filter(item => item.name === body.name).length !== 0) {
+  if (people.filter(item => item.name === body.name).length !== 0) {
     return response.status(400).json({
       error: 'name must be unique'
     });
@@ -84,11 +93,11 @@ app.post('/persons', (request, response) => {
     id: generateId()
   };
 
-  persons = persons.concat(person);
+  people = people.concat(person);
   response.json(person);
 });
 
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
