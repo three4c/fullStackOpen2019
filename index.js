@@ -46,6 +46,7 @@ app.get('/info', (request, response) => {
   `);
 });
 
+/** json-server */
 app.get('/people', (request, response) => {
   response.json(people);
 });
@@ -54,19 +55,6 @@ app.get('/people/:id', (request, response) => {
   const id = Number(request.params.id);
   const person = people.find(person => person.id === id);
   person ? response.json(person) : response.status(404).end();
-});
-
-app.get('/api/people', (request, response) => {
-  Person.find({}).then(person => {
-    response.json(person);
-  });
-});
-
-app.delete('/people/:id', (request, response) => {
-  const id = Number(request.params.id);
-  people = people.filter(person => person.id !== id);
-
-  response.status(204).end();
 });
 
 app.post('/people', (request, response) => {
@@ -95,6 +83,59 @@ app.post('/people', (request, response) => {
 
   people = people.concat(person);
   response.json(person);
+});
+
+app.delete('/people/:id', (request, response) => {
+  const id = Number(request.params.id);
+  people = people.filter(person => person.id !== id);
+
+  response.status(204).end();
+});
+
+/** mongoDB */
+app.get('/api/people', (request, response) => {
+  Person.find({}).then(person => {
+    response.json(person);
+  });
+});
+
+app.post(`/api/people`, (request, response) => {
+  const body = request.body;
+
+  const format = `:method :url - :status - :response-time ms ${request.body}`;
+  app.use(morgan(format));
+
+  if (!body.name || !body.number) {
+    return response.status(400).json({
+      error: 'content missing'
+    });
+  }
+
+  if (people.filter(item => item.name === body.name).length !== 0) {
+    return response.status(400).json({
+      error: 'name must be unique'
+    });
+  }
+
+  const person = new Person({
+    name: body.name,
+    number: body.number
+  });
+
+  person.save().then(savedPerson => {
+    response.json(savedPerson.toJSON());
+  });
+});
+
+app.get('/api/people/:id', (request, response) => {
+  Person.findById(request.params.id)
+    .then(note => {
+      response.json(note.toJSON());
+    })
+    .catch(error => {
+      console.log(error);
+      response.status(404).end();
+    });
 });
 
 const PORT = process.env.PORT;
