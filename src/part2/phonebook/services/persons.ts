@@ -1,5 +1,5 @@
 import axios from 'axios';
-const baseUrl = '/persons';
+const baseUrl = '/api/people';
 
 interface PersonProps {
   items: {
