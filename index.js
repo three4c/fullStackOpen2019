@@ -24,25 +24,25 @@ app.post(`/api/people`, (request, response) => {
   const format = `:method :url - :status - :response-time ms ${request.body}`;
   app.use(morgan(format));
 
-  if (!body.name || !body.number) {
-    return response.status(400).json({
-      error: 'content missing'
-    });
-  }
+  Person.find({}).then(person => {
+    if (!body.name || !body.number) {
+      return response.status(400).json({
+        error: 'content missing'
+      });
+    } else if (person.filter(item => item.name === body.name).length !== 0) {
+      return response.status(400).json({
+        error: 'name must be unique'
+      });
+    } else {
+      const person = new Person({
+        name: body.name,
+        number: body.number
+      });
 
-  // if (Person.find({}).then(person => person.filter(item => item.name === body.name).length !== 0)) {
-  //   return response.status(400).json({
-  //     error: 'name must be unique'
-  //   });
-  // }
-
-  const person = new Person({
-    name: body.name,
-    number: body.number
-  });
-
-  person.save().then(savedPerson => {
-    response.json(savedPerson.toJSON());
+      person.save().then(savedPerson => {
+        response.json(savedPerson.toJSON());
+      });
+    }
   });
 });
 
