@@ -9,7 +9,9 @@ mongoose.connect(url, { useNewUrlParser: true });
 
 const personSchema = new mongoose.Schema({
   name: String,
-  number: String
+  number: String,
+  minlength: 5,
+  required: true
 });
 
 const Person = mongoose.model('person', personSchema);
