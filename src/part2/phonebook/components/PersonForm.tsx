@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 
-interface PersonFormProps {
+interface PeopleFormProps {
   onSubmit: any;
   onChangeName: any;
   newName: string;
@@ -8,7 +8,7 @@ interface PersonFormProps {
   newNumber: string;
 }
 
-const PersonForm: FC<PersonFormProps> = props => {
+const PeopleForm: FC<PeopleFormProps> = props => {
   return (
     <form onSubmit={props.onSubmit}>
       <div>
@@ -16,7 +16,8 @@ const PersonForm: FC<PersonFormProps> = props => {
           name: <input onChange={e => props.onChangeName(e.target.value)} value={props.newName} />
         </div>
         <div>
-          number: <input onChange={e => props.onChangeNumber(e.target.value)} value={props.newNumber} />
+          number:{' '}
+          <input onChange={e => props.onChangeNumber(e.target.value)} value={props.newNumber} />
         </div>
       </div>
       <div>
@@ -26,4 +27,4 @@ const PersonForm: FC<PersonFormProps> = props => {
   );
 };
 
-export default PersonForm;
+export default PeopleForm;

@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import Filter from './components/Filter';
 import Person from './components/PersonForm';
-import Persons from './components/Persons';
-import personService from './services/persons';
+import People from './components/People';
+import personService from './services/person';
 import Notification from './components/Notification';
 
 const Phonebook = () => {
-  const [persons, setPersons] = useState([{ name: '', number: '', id: 0 }]);
+  const [people, setPeople] = useState([{ name: '', number: '', id: 0 }]);
   const [newName, setNewName] = useState('');
   const [newNumber, setNewNumber] = useState('');
   const [filterName, setFilterName] = useState('');
@@ -14,7 +14,7 @@ const Phonebook = () => {
   const [isSuccess, setSuccess] = useState(false);
 
   useEffect(() => {
-    personService.getAll().then(initialPersons => setPersons(initialPersons));
+    personService.getAll().then(initialPeople => setPeople(initialPeople));
   }, []);
 
   const notification = (message: string) => {
@@ -30,7 +30,7 @@ const Phonebook = () => {
     const newPersonObject = {
       name: newName,
       number: newNumber,
-      id: persons[persons.length - 1].id + 1
+      id: people[people.length - 1].id + 1
     };
 
     const putPhonenumber = (id: number) => {
@@ -42,7 +42,7 @@ const Phonebook = () => {
         personService
           .update(id, { name: newName, number: newNumber })
           .then(() => {
-            personService.getAll().then(initialPersons => setPersons(initialPersons));
+            personService.getAll().then(initialPeople => setPeople(initialPeople));
             notification(`Changed ${newNumber} is phonenumber of ${newNumber}`);
             setSuccess(true);
           })
@@ -53,10 +53,10 @@ const Phonebook = () => {
       }
     };
 
-    persons.find(item => item.name === newName)
-      ? putPhonenumber(persons[persons.findIndex(item => item.name === newName)].id)
-      : personService.create(newPersonObject).then(initialPersons => {
-          setPersons(persons.concat(initialPersons));
+    people.find(item => item.name === newName)
+      ? putPhonenumber(people[people.findIndex(item => item.name === newName)].id)
+      : personService.create(newPersonObject).then(initialPeople => {
+          setPeople(people.concat(initialPeople));
           notification(`Added ${newName}`);
           setSuccess(true);
         });
@@ -68,7 +68,7 @@ const Phonebook = () => {
   const deletePhonebook = (id: number) => {
     personService
       .delete(id)
-      .then(() => personService.getAll().then(initialPersons => setPersons(initialPersons)));
+      .then(() => personService.getAll().then(initialPeople => setPeople(initialPeople)));
   };
 
   return (
@@ -85,7 +85,7 @@ const Phonebook = () => {
         newNumber={newNumber}
       />
       <h2>Numbers</h2>
-      <Persons persons={persons} filterName={filterName} onClick={deletePhonebook} />
+      <People people={people} filterName={filterName} onClick={deletePhonebook} />
     </div>
   );
 };

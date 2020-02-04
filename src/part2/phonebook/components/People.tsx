@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 
-interface PersonsProps {
-  persons: {
+interface PeopleProps {
+  people: {
     name: string;
     number: string;
     id: number;
@@ -10,10 +10,10 @@ interface PersonsProps {
   onClick: any;
 }
 
-const Persons: FC<PersonsProps> = props => {
+const People: FC<PeopleProps> = props => {
   return (
     <ul>
-      {props.persons
+      {props.people
         .filter(item => item.name.toLowerCase().search(props.filterName.toLowerCase()) !== -1)
         .map((item, index) => (
           <li key={index}>
@@ -24,4 +24,4 @@ const Persons: FC<PersonsProps> = props => {
   );
 };
 
-export default Persons;
+export default People;

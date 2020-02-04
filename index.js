@@ -18,7 +18,7 @@ app.get('/api/people', (request, response) => {
   });
 });
 
-app.post(`/api/people`, (request, response) => {
+app.post(`/api/people`, (request, response, next) => {
   const body = request.body;
 
   const format = `:method :url - :status - :response-time ms ${request.body}`;
@@ -39,9 +39,11 @@ app.post(`/api/people`, (request, response) => {
         number: body.number
       });
 
-      person.save().then(savedPerson => {
-        response.json(savedPerson.toJSON());
-      });
+      person
+        .save()
+        .then(savedPeople => savedPeople.toJSON())
+        .then(savedAndFormattedPeople => response.json(savedAndFormattedPeople))
+        .catch(error => next(error));
     }
   });
 });
@@ -88,6 +90,8 @@ const errorHandler = (error, request, response, next) => {
 
   if (error.name === 'CastError' && error.kind === 'ObjectId') {
     return response.status(400).send({ error: 'malformatted id' });
+  } else if (error.name === 'ValidationError') {
+    return response.status(400).json({ error: error.message });
   }
 
   next(error);
