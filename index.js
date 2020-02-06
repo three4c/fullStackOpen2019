@@ -41,8 +41,10 @@ app.post(`/api/people`, (request, response, next) => {
 
       person
         .save()
-        .then(savedPeople => savedPeople.toJSON())
-        .then(savedAndFormattedPeople => response.json(savedAndFormattedPeople))
+        .then(savedPerson => savedPerson.toJSON())
+        .then(savedAndFormattedNote => {
+          response.json(savedAndFormattedNote);
+        })
         .catch(error => next(error));
     }
   });
