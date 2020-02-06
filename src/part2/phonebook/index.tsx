@@ -55,11 +55,16 @@ const Phonebook = () => {
 
     people.find(item => item.name === newName)
       ? putPhonenumber(people[people.findIndex(item => item.name === newName)].id)
-      : personService.create(newPersonObject).then(initialPeople => {
-          setPeople(people.concat(initialPeople));
-          notification(`Added ${newName}`);
-          setSuccess(true);
-        });
+      : personService
+          .create(newPersonObject)
+          .then(initialPeople => {
+            setPeople(people.concat(initialPeople));
+            notification(`Added ${newName}`);
+            setSuccess(true);
+          })
+          .catch(error => {
+            console.log(error.response.data);
+          });
 
     setNewName('');
     setNewNumber('');
