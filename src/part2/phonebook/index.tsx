@@ -63,7 +63,8 @@ const Phonebook = () => {
             setSuccess(true);
           })
           .catch(error => {
-            console.log(error.response.data);
+            console.log(error.response.data.error);
+            notification(error.response.data.error);
           });
 
     setNewName('');
