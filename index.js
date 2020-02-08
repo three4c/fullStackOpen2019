@@ -12,13 +12,13 @@ app.use(bodyParser.json());
 app.use(cors());
 
 /** mongoDB */
-app.get('/api/people', (request, response) => {
+app.get('/api/people', (_, response) => {
   Person.find({}).then(person => {
     response.json(person);
   });
 });
 
-app.post(`/api/people`, (request, response, next) => {
+app.post('/api/people', (request, response, next) => {
   const body = request.body;
 
   const format = `:method :url - :status - :response-time ms ${request.body}`;
@@ -60,7 +60,7 @@ app.get('/api/people/:id', (request, response, next) => {
 
 app.delete('/api/people/:id', (request, response, next) => {
   Person.findByIdAndRemove(request.params.id)
-    .then(result => {
+    .then(() => {
       response.status(204).end();
     })
     .catch(error => next(error));
@@ -81,13 +81,13 @@ app.put('/api/people/:id', (request, response, next) => {
     .catch(error => next(error));
 });
 
-const unknownEndpoint = (request, response) => {
+const unknownEndpoint = (_, response) => {
   response.status(404).send({ error: 'unknown endpoint' });
 };
 
 app.use(unknownEndpoint);
 
-const errorHandler = (error, request, response, next) => {
+const errorHandler = (error, _, response, next) => {
   console.error(error.message);
 
   if (error.name === 'CastError' && error.kind === 'ObjectId') {
