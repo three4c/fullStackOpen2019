@@ -31,7 +31,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "server": "json-server -p3001 db.json",
-    "watch": "nodemon index.js",
+    "watch": "nodemon ./src/part3/index.js",
     "lint": "eslint ."
   },
   "eslintConfig": {
