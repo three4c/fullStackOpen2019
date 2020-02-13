@@ -28,8 +28,8 @@ peopleRouter.post('/', (request, response, next) => {
       person
         .save()
         .then(savedPerson => savedPerson.toJSON())
-        .then(savedAndFormattedNote => {
-          response.json(savedAndFormattedNote);
+        .then(savedAndFormattedPerson => {
+          response.json(savedAndFormattedPerson);
         })
         .catch(error => next(error));
     }
