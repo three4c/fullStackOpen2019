@@ -8,6 +8,7 @@ describe('total likes', () => {
       author: 'Edsger W. Dijkstra',
       url: 'http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html',
       likes: 5,
+      blogs: 3,
       __v: 0
     },
     {
@@ -16,6 +17,7 @@ describe('total likes', () => {
       author: 'Edsger W. Dijkstra',
       url: 'http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html',
       likes: 12,
+      blogs: 1,
       __v: 0
     }
   ];
@@ -33,7 +35,24 @@ describe('total likes', () => {
       author: 'Edsger W. Dijkstra',
       url: 'http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html',
       likes: 12,
+      blogs: 1,
       __v: 0
+    });
+  });
+
+  test('most blogs', () => {
+    const result = listHelper.mostBlogs(listWithOneBlog);
+    expect(result).toEqual({
+      author: 'Edsger W. Dijkstra',
+      blogs: 3
+    });
+  });
+
+  test('most likes', () => {
+    const result = listHelper.mostLikes(listWithOneBlog);
+    expect(result).toEqual({
+      author: 'Edsger W. Dijkstra',
+      likes: 12
     });
   });
 });
