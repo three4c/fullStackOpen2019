@@ -3,7 +3,7 @@ const totalLikes = blogs => {
 };
 
 const favoriteBlog = blogs => {
-  blogs.reduce((acc, cur) => (acc.likes > cur.likes ? acc : cur));
+  return blogs.reduce((acc, cur) => (acc.likes > cur.likes ? acc : cur));
 };
 
 module.exports = {
