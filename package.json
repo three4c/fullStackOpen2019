@@ -31,10 +31,11 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "server": "json-server -p3001 db.json",
-    "watch:part3": "nodemon ./src/part3/index.js",
-    "watch:part4": "nodemon ./src/part4/index.js",
+    "watch": "nodemon ./src/part3/index.js",
+    "start:part4": "cross-env NODE_ENV=production node ./src/part4/index.js",
+    "watch:part4": "cross-env NODE_ENV=development nodemon ./src/part4/index.js",
     "lint": "eslint .",
-    "test:jest": "jest --verbose"
+    "test:jest": "NODE_ENV=test jest --verbose --runInBand"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -54,10 +55,12 @@
   "devDependencies": {
     "@types/react": "^16.9.19",
     "@types/react-dom": "^16.9.5",
+    "cross-env": "^7.0.0",
     "eslint": "^6.8.0",
     "jest": "^25.1.0",
     "json-server": "^0.15.1",
-    "nodemon": "^2.0.2"
+    "nodemon": "^2.0.2",
+    "supertest": "^4.0.2"
   },
   "proxy": "http://localhost:3001"
 }
