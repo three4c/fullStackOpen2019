@@ -20,7 +20,7 @@ test('blogs are returned as json', async () => {
     .expect('Content-Type', /application\/json/);
 });
 
-test('there are five blogs', async () => {
+test('all blogs are returned', async () => {
   const response = await api.get('/api/blogs');
 
   expect(response.body.length).toBe(helper.initialBlogs.length);
@@ -30,6 +30,24 @@ test('the first blogs is about HTTP methods', async () => {
   const response = await api.get('/api/blogs');
   const title = response.body.map(r => r.title);
   expect(title).toContain('hoge');
+});
+
+test('a valid blogs can be added ', async () => {
+  const newBlog = {
+    title: 'async/await simplifies making async calls'
+  };
+
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(200)
+    .expect('Content-Type', /application\/json/);
+
+  const blogsAtEnd = await helper.blogsInDb();
+  expect(blogsAtEnd.length).toBe(helper.initialBlogs.length + 1);
+
+  const titles = blogsAtEnd.map(n => n.title);
+  expect(titles).toContain('async/await simplifies making async calls');
 });
 
 afterAll(() => {
