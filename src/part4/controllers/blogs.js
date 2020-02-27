@@ -7,15 +7,16 @@ blogsRouter.get('/', async (_, response) => {
 });
 
 blogsRouter.get('/:id', (request, response, next) => {
-  Blog.findById(request.params.id)
-    .then(blog => {
-      if (blog) {
-        response.json(blog.toJSON());
-      } else {
-        response.status(404).end();
-      }
-    })
-    .catch(error => next(error));
+  try {
+    const blog = await Blog.findById(request.params.id);
+    if (blog) {
+      response.json(blog.toJSON());
+    } else {
+      response.status(404).end();
+    }
+  } catch (exception) {
+    next(exception);
+  }
 });
 
 blogsRouter.post('/', (request, response) => {
