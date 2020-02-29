@@ -2,8 +2,7 @@ post http://localhost:3001/api/blogs
 Content-Type: application/json
 
 {
-    "title": "hoge", 
     "authoer": "piyo",
-    "url": "https://fuga.com",
+    "url": "https://piyo.com",
     "likes": 3
 }

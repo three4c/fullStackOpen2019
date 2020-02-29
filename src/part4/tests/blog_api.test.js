@@ -6,48 +6,67 @@ const Blog = require('../models/blog');
 
 const api = supertest(app);
 
-beforeEach(async () => {
-  await Blog.deleteMany({});
+describe('最初にいくつかのブログが保存されている時', () => {
+  beforeEach(async () => {
+    await Blog.deleteMany({});
 
-  let blogObject = new Blog(helper.initialBlogs[0]);
-  await blogObject.save();
+    let blogObject = new Blog(helper.initialBlogs[0]);
+    await blogObject.save();
+  });
+
+  test('ブログはjsonとして返される', async () => {
+    await api
+      .get('/api/blogs')
+      .expect(200)
+      .expect('Content-Type', /application\/json/);
+  });
+
+  test('全てのブログが返される', async () => {
+    const response = await api.get('/api/blogs');
+
+    expect(response.body.length).toBe(helper.initialBlogs.length);
+  });
+
+  test('特定のブログは返されたブログ内にある', async () => {
+    const response = await api.get('/api/blogs');
+    const title = response.body.map(r => r.title);
+    expect(title).toContain('hoge');
+  });
 });
 
-test('blogs are returned as json', async () => {
-  await api
-    .get('/api/blogs')
-    .expect(200)
-    .expect('Content-Type', /application\/json/);
-});
+describe('新しいブログの追加', () => {
+  test('データの追加に成功する', async () => {
+    const newBlog = {
+      title: 'async/await simplifies making async calls'
+    };
 
-test('all blogs are returned', async () => {
-  const response = await api.get('/api/blogs');
+    await api
+      .post('/api/blogs')
+      .send(newBlog)
+      .expect(200)
+      .expect('Content-Type', /application\/json/);
 
-  expect(response.body.length).toBe(helper.initialBlogs.length);
-});
+    const blogsAtEnd = await helper.blogsInDb();
+    expect(blogsAtEnd.length).toBe(helper.initialBlogs.length + 1);
 
-test('the first blogs is about HTTP methods', async () => {
-  const response = await api.get('/api/blogs');
-  const title = response.body.map(r => r.title);
-  expect(title).toContain('hoge');
-});
+    const titles = blogsAtEnd.map(n => n.title);
+    expect(titles).toContain('async/await simplifies making async calls');
+  });
 
-test('a valid blogs can be added ', async () => {
-  const newBlog = {
-    title: 'async/await simplifies making async calls'
-  };
+  test('データが無効な場合、ステータスコード400で有効な失敗する', async () => {
+    const newBlog = {
+      url: 'https://piyo.com'
+    };
 
-  await api
-    .post('/api/blogs')
-    .send(newBlog)
-    .expect(200)
-    .expect('Content-Type', /application\/json/);
+    await api
+      .post('/api/blogs')
+      .send(newBlog)
+      .expect(400);
 
-  const blogsAtEnd = await helper.blogsInDb();
-  expect(blogsAtEnd.length).toBe(helper.initialBlogs.length + 1);
+    const blogsAtEnd = await helper.blogsInDb();
 
-  const titles = blogsAtEnd.map(n => n.title);
-  expect(titles).toContain('async/await simplifies making async calls');
+    expect(blogsAtEnd.length).toBe(helper.initialBlogs.length + 1);
+  });
 });
 
 afterAll(() => {

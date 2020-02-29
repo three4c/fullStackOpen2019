@@ -2,7 +2,10 @@ const Blog = require('../models/blog');
 
 const initialBlogs = [
   {
-    title: 'hoge'
+    title: 'hoge',
+    authoer: 'hoge',
+    url: 'https://hoge.com',
+    likes: 3
   }
 ];
 
