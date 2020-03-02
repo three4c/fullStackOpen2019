@@ -9,9 +9,9 @@ const api = supertest(app);
 describe('最初にいくつかのブログが保存されている時', () => {
   beforeEach(async () => {
     await Blog.deleteMany({});
-
-    let blogObject = new Blog(helper.initialBlogs[0]);
-    await blogObject.save();
+    const blogObjects = helper.initialBlogs.map(blog => new Blog(blog));
+    const promiseArray = blogObjects.map(blog => blog.save());
+    await Promise.all(promiseArray);
   });
 
   test('ブログはjsonとして返される', async () => {
