@@ -30,7 +30,7 @@ describe('最初にいくつかのブログが保存されている時', () => {
   test('特定のブログは返されたブログ内にある', async () => {
     const response = await api.get('/api/blogs');
     const title = response.body.map(r => r.title);
-    expect(title).toContain('hoge');
+    expect(title).toContain('hogehoge');
   });
 });
 
