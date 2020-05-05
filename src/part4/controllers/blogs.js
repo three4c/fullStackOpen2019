@@ -3,7 +3,7 @@ const Blog = require('../models/blog');
 
 blogsRouter.get('/', async (_, response) => {
   const blogs = await Blog.find({});
-  response.json(blogs.map(blog => blog.toJSON()));
+  response.json(blogs.map((blog) => blog.toJSON()));
 });
 
 blogsRouter.get('/:id', async (request, response, next) => {
@@ -26,7 +26,7 @@ blogsRouter.post('/', async (request, response, next) => {
     title: body.title,
     author: body.author,
     url: body.url,
-    likes: body.likes
+    likes: body.likes,
   });
 
   try {
@@ -53,14 +53,14 @@ blogsRouter.put('/:id', (request, response, next) => {
     title: body.title,
     author: body.author,
     url: body.url,
-    likes: body.likes
+    likes: body.likes,
   });
 
   Blog.findByIdAndUpdate(request.params.id, blog, { new: true })
-    .then(updatedBlog => {
+    .then((updatedBlog) => {
       response.json(updatedBlog.toJSON());
     })
-    .catch(error => next(error));
+    .catch((error) => next(error));
 });
 
 module.exports = blogsRouter;

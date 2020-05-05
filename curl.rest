@@ -1,8 +1,8 @@
-post http://localhost:3001/api/blogs
+post http://localhost:3001/api/users
 Content-Type: application/json
 
 {
-    "authoer": "piyo",
-    "url": "https://piyo.com",
-    "likes": 3
+    "username": "fuga",
+    "name": "fugafuga",
+    "password":"fugafugafuga"
 }
