@@ -1,7 +1,0 @@
-post http://localhost:3001/api/blogs
-Content-Type: application/json
-
-{
-    "title": "user test",
-    "userId":"5eb2793d6a5fbf0b2f516274"
-}
