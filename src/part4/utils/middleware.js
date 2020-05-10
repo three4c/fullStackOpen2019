@@ -12,6 +12,15 @@ const unknownEndpoint = (_, response) => {
   response.status(404).send({ error: 'unknown endpoint' });
 };
 
+const tokenExtractor = (request, _, next) => {
+  const authorization = request.get('authorization');
+  if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
+    // request.tokenに代入することでblogsのルーティングから持ってこれる様になる
+    request.token = authorization.substring(7);
+  }
+  next();
+};
+
 const errorHandler = (error, _, response, next) => {
   console.error(error.message);
 
@@ -29,6 +38,7 @@ const errorHandler = (error, _, response, next) => {
 
 module.exports = {
   requestLogger,
+  tokenExtractor,
   unknownEndpoint,
   errorHandler,
 };

@@ -1,0 +1,8 @@
+POST http://localhost:3001/api/blogs
+Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImhvZ2UiLCJpZCI6IjVlYjI3OTNkNmE1ZmJmMGIyZjUxNjI3NCIsImlhdCI6MTU4OTAxMzQ1Mn0.wpRKc2lJWxRqDo46ycoF_ZegfM7cjJR_3CkyB6yBs9k
+
+{
+    "title": "センチメンタル・ジャーニー",
+    "likes": 5
+}
